@@ -1,0 +1,64 @@
+# The class implementation was copied from the course syllabus.
+
+class HashTable:
+    def __init__(self, size):
+        self.size = size
+        self.table = [[] for _ in range(self.size)]
+
+    def hash_function(self, key):
+        return hash(key) % self.size
+
+    def insert(self, key, value):
+        key_hash = self.hash_function(key)
+        key_value = [key, value]
+
+        if self.table[key_hash] is None:
+            self.table[key_hash] = list([key_value])
+            return True
+        else:
+            for pair in self.table[key_hash]:
+                if pair[0] == key:
+                    pair[1] = value
+                    return True
+            self.table[key_hash].append(key_value)
+            return True
+
+    def get(self, key):
+        key_hash = self.hash_function(key)
+        if self.table[key_hash] is not None:
+            for pair in self.table[key_hash]:
+                if pair[0] == key:
+                    return pair[1]
+        return None
+
+    # my implemented method
+    def delete(self, key):
+        key_hash = self.hash_function(key)
+
+        if self.table[key_hash] is None:
+            return False
+        for i in range(0, len(self.table[key_hash])):
+            if self.table[key_hash][i][0] == key:
+                self.table[key_hash].pop(i)
+                return True
+        return False
+
+
+def main():
+    # Testing the HashTable class:
+    hash_table = HashTable(5)
+
+    hash_table.insert("apple", 10)
+    hash_table.insert("orange", 20)
+    hash_table.insert("banana", 30)
+
+    print(hash_table.get("apple"))   # Output: 10
+    print(hash_table.get("orange"))  # Output: 20
+    print(hash_table.get("banana"))  # Output: 30
+
+    hash_table.delete("orange")
+    print(hash_table.get("orange"))  # Output: None
+
+
+if __name__ == "__main__":
+    main()
