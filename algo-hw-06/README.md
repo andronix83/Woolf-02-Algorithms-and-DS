@@ -28,13 +28,20 @@ The graph represents a simplified model of the metro system with the following c
 ### 2. Pathfinding Comparison: BFS vs. DFS (Task 2)
 We calculated the path from **Heroiv Dnipra** (Blue Line) to **Chervonyi Khutir** (Green Line).
 
-* **BFS (Breadth-First Search):** Found a path of 21 steps. BFS guarantees the shortest path in terms of the number of stops.
-* **DFS (Depth-First Search):** Found a path of 21 steps.
+* **BFS (Breadth-First Search):** Found a path of **21 steps**. BFS guarantees the shortest path in terms of the number of edges (stops). It correctly identified the direct transfer from the Blue Line to the Green Line.
+* **DFS (Depth-First Search):** Found a path of **23 steps**.
 
-**Observation:**
-In this specific execution, **BFS and DFS returned the exact same path**.
-* **Why?** The Kyiv Metro graph has a very simple topology with almost no cycles or loops. Once the algorithm switches from the Blue line to the Green line via the transfer hub, there is only one direction to reach the destination. Therefore, DFS did not "get lost" in a wrong branch and found the same optimal route as BFS.
+**Detailed Comparison:**
 
+| Algorithm | Path Strategy | Route Taken |
+| :--- | :--- | :--- |
+| **BFS** | Shortest (21 stops) | *... Maidan Nezalezhnosti* -> **Ploshcha Ukrainskykh Heroiv** -> **Palats Sportu** -> *...* <br> (Direct transfer: Blue -> Green) |
+| **DFS** | Non-Optimal (23 stops) | *... Maidan Nezalezhnosti* -> **Khreshchatyk** -> **Teatralna** -> **Zoloti Vorota** -> **Palats Sportu** -> *...* <br> (Detour: Blue -> Red -> Green) |
+
+**Observation & Conclusion:**
+In this execution, **BFS performed better than DFS**.
+* **Why did DFS take a longer route?** DFS (Depth-First Search) does not look for the shortest path; it explores one branch as deep as possible before backtracking. When the algorithm reached *Maidan Nezalezhnosti*, it saw a connection to *Khreshchatyk* (Red Line). Instead of continuing along the Blue Line, it "dived" into the Red Line connection, traveled to *Teatralna*, and then transferred to the Green Line via *Zoloti Vorota*.
+* **Key Takeaway:** This perfectly illustrates that while DFS is useful for exploring all nodes or checking connectivity, it is **not reliable for finding the shortest path** in a network with cycles or multiple transfer points.
 ### 3. Weighted Shortest Path: Dijkstra (Task 3)
 We applied Dijkstra's algorithm with the following weights:
 * Travel between stations: **2 minutes**

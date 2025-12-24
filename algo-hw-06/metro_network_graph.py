@@ -1,6 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+import algorithms as alg
+
 
 # ==========================================
 # TASK 1: Graph Creation and Visualization
@@ -120,15 +122,8 @@ def bfs_vs_def_paths(G, start_station, end_station):
     print("TASK 2: BFS vs DFS Paths")
     print("-" * 30)
 
-    # BFS Implementation
-    # nx.shortest_path uses BFS by default if no weight is specified
-    bfs_path = nx.shortest_path(G, source=start_station, target=end_station)
-
-    # DFS Implementation
-    # We first generate a DFS tree starting from the source,
-    # then find the path in that tree to the target.
-    dfs_tree = nx.dfs_tree(G, source=start_station)
-    dfs_path = nx.shortest_path(dfs_tree, source=start_station, target=end_station)
+    bfs_path = alg.bfs_path(G, start_station, end_station)
+    dfs_path = alg.dfs_path(G, start_station, end_station)
 
     print(f"Start: {start_station} -> End: {end_station}")
     print(f"\nBFS Path ({len(bfs_path)} steps): {bfs_path}")
@@ -149,11 +144,11 @@ def dijkstra_paths(G, start_station, end_station):
     # - Travel between stations: 2 units
     # - Transfer between lines: 5 units
 
-    dijkstra_path = nx.dijkstra_path(G, source=start_station, target=end_station, weight='weight')
-    path_length = nx.dijkstra_path_length(G, source=start_station, target=end_station, weight='weight')
+    dijkstra_distances, previous = alg.dijkstra_paths(G, start_station)
+    dijkstra_path = alg.dijkstra_reconstruct_path(previous, start_station, end_station)
 
     print(f"Dijkstra Path (Weighted): {dijkstra_path}")
-    print(f"Total 'Time' (Weight): {path_length} minutes")
+    print(f"Total 'Time' (Weight): {dijkstra_distances[end_station]} minutes")
 
     # Example for finding the shortest paths between ALL nodes (showing subset)
     print("\nShortest paths from 'Khreshchatyk' to all other nodes (subset):")
